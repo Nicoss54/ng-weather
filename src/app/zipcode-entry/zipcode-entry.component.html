@@ -10,7 +10,8 @@
     </ng-container>
   </app-typehead>
   <br>
-  <app-button-three-state [clickAction]="addLocation.bind(this)" [reInitiallyDelay]="2000">
+  <app-button-three-state [clickAction]="addLocation.bind(this)" [reInitiallyDelay]="2000"
+                          [disabled]="zipCodeForm.invalid">
     <ng-container initial>
       Add Location
     </ng-container>

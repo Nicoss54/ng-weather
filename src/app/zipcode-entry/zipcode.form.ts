@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 export interface ZipCodeForm {
   zipCode: string;
@@ -11,8 +11,8 @@ export class ZipCodeForm extends FormGroup {
 
   constructor() {
     super({
-      zipCode: new FormControl(null),
-      country: new FormControl(null)
+      zipCode: new FormControl(null, Validators.required),
+      country: new FormControl(null, Validators.required)
     });
   }
 }

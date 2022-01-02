@@ -1,4 +1,4 @@
-<button type="button" [disabled]="currentState === 'LOADING'" class="btn"
+<button type="button" [disabled]="currentState === 'LOADING' || disabled" class="btn"
         [ngClass]="{'btn-success': currentState === 'DONE', 'btn-primary': currentState === 'INITIAL' || currentState === 'LOADING'}"
         (click)="onClick()">
   <ng-container [ngSwitch]="currentState">

@@ -15,6 +15,7 @@ export class ButtonThreeStateComponent implements OnInit {
   currentState: BUTTON_STATE;
   @Input('clickAction') clickAction$: () => Observable<any>;
   @Input() reInitiallyDelay: number = 2000;
+  @Input() disabled: boolean;
   
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) { }
 
