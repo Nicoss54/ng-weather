@@ -16,8 +16,8 @@ export class CurrentConditionsComponent {
   constructor(private readonly router : Router) {
   }
 
-  showForecast(zipCode : string){
-    this.router.navigate(['/forecast', zipCode])
+  showForecast(zipCode : string, country: string){
+    this.router.navigate(['/forecast', zipCode, country])
   }
 
   removeLocation(zipCode: string): void {

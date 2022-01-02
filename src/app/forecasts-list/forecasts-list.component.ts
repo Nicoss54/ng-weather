@@ -10,6 +10,7 @@ import { WeatherService } from 'app/core/providers/weather.service';
 })
 export class ForecastsListComponent implements OnInit {
   zipcode: string;
+  country: string;
   forecast: any;
 
   constructor(private readonly weatherService: WeatherService, private readonly route : ActivatedRoute) { }
@@ -17,7 +18,8 @@ export class ForecastsListComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       this.zipcode = params['zipcode'];
-      this.weatherService.getForecast(this.zipcode)
+      this.country = params['country'];
+      this.weatherService.getForecast(this.zipcode, this.country)
         .subscribe(data => this.forecast = data);
     });
   }

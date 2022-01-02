@@ -35,9 +35,8 @@ export class WeatherService {
     return this.currentConditions;
   }
 
-  getForecast(zipcode: string): Observable<any> {
-    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},us&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
-
+  getForecast(zipcode: string, country: string): Observable<any> {
+    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},${country}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
   }
 
   private getWeatherIcon(id){
