@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WeatherService } from 'app/core/providers/weather.service';
+import { Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -9,18 +11,14 @@ import { WeatherService } from 'app/core/providers/weather.service';
   styleUrls: ['./forecasts-list.component.css']
 })
 export class ForecastsListComponent implements OnInit {
-  zipcode: string;
-  country: string;
-  forecast: any;
+  forecast$: Observable<any>;
 
   constructor(private readonly weatherService: WeatherService, private readonly route : ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.zipcode = params['zipcode'];
-      this.country = params['country'];
-      this.weatherService.getForecast(this.zipcode, this.country)
-        .subscribe(data => this.forecast = data);
-    });
+    this.forecast$ = this.route.paramMap.pipe(
+      switchMap(params => of({zipCode: params.get('zipcode'), country: params.get('country')})),
+      switchMap(params => this.weatherService.getForecast(params.zipCode, params.country)),
+    )
   }
 }

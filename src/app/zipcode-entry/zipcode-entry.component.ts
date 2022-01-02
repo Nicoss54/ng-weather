@@ -1,20 +1,21 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { WeatherService } from 'app/core/providers/weather.service';
 import { ForecastData } from 'app/shared/models/forecat.model';
-import { fromEvent, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { ZipCodeForm } from './zipcode.form';
 
 @Component({
   selector: 'app-zipcode-entry',
   templateUrl: './zipcode-entry.component.html',
 })
-export class ZipcodeEntryComponent implements OnInit, AfterViewInit{
+export class ZipcodeEntryComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output('addNewLocation') addNewLocation$ = new EventEmitter<ForecastData>();
   @ViewChild('searchInput') searchInput: ElementRef<HTMLInputElement>;
   zipCodeForm: ZipCodeForm;
   countries: Array<{ name: string; code: string }>;
-  filteredCountries: Array<{ name: string; code: string }>
+  filteredCountries: Array<{ name: string; code: string }>;
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
   
   constructor(private readonly weatherService : WeatherService, private readonly renderer: Renderer2) { }
 
@@ -25,9 +26,14 @@ export class ZipcodeEntryComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.searchInput.nativeElement, 'input').pipe().subscribe(value => {
+    fromEvent(this.searchInput.nativeElement, 'input').pipe(takeUntil(this.unsubscribe$)).subscribe(value => {
       this.filteredCountries = this.countries.filter(country => country.name.toLowerCase().includes(this.searchInput.nativeElement.value.toLowerCase()));
     })
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.complete();
   }
 
   addLocation(): Observable<any> {

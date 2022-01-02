@@ -36,7 +36,7 @@ export class WeatherService {
   }
 
   getForecast(zipcode: string, country: string): Observable<any> {
-    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},${country}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`);
+    return this.http.get(`${WeatherService.URL}/forecast/daily?zip=${zipcode},${country}&units=imperial&cnt=5&APPID=${WeatherService.APPID}`).pipe(map(data => ({ ...data, list: data['list'].map(item => ({ ...item, imgWeatherSrc: this.getWeatherIcon(item.weather[0].id) })) })));
   }
 
   private getWeatherIcon(id){
