@@ -1,0 +1,22 @@
+.typehead {
+  position: relative;
+}
+
+.typehead__container-input {
+  margin-bottom: 5px
+}
+
+.typehead__result-list {
+  position: absolute;
+  width: 50%;
+  z-index: 5;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px -1px #0003, 0 4px 5px #00000024, 0 1px 10px #0000001f
+}
+
+.typehead__result-list__item {
+  padding: 5px 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}

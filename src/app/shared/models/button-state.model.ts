@@ -1,0 +1,5 @@
+export enum BUTTON_STATE {
+  INITIAL = 'INITIAL',
+  LOADING = 'LOADING',
+  DONE = 'DONE',
+}

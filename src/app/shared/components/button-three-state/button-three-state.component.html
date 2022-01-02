@@ -1,0 +1,28 @@
+<button type="button" [disabled]="currentState === 'LOADING'" class="btn"
+        [ngClass]="{'btn-success': currentState === 'DONE', 'btn-primary': currentState === 'INITIAL' || currentState === 'LOADING'}"
+        (click)="onClick()">
+  <ng-container [ngSwitch]="currentState">
+    <ng-container *ngSwitchCase="'INITIAL'">
+      <ng-container *ngTemplateOutlet="INITIAL"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'LOADING'">
+      <ng-container *ngTemplateOutlet="LOADING"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'DONE'">
+      <ng-container *ngTemplateOutlet="DONE"></ng-container>
+    </ng-container>
+  </ng-container>
+</button>
+
+
+<ng-template #INITIAL>
+  <ng-content select="[initial]"></ng-content>
+</ng-template>
+
+<ng-template #LOADING>
+  <ng-content select="[loading]"></ng-content>
+</ng-template>
+
+<ng-template #DONE>
+  <ng-content select="[done]"></ng-content>
+</ng-template>

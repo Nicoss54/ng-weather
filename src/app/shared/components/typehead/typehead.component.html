@@ -1,0 +1,10 @@
+<div class="typehead">
+  <div class="typehead__container-input">
+    <ng-content select="input"></ng-content>
+  </div>
+  <div class="typehead__result-list" *ngIf="options.toArray().length > 0 && this.showListOptions === true">
+    <div *ngFor="let option of options.toArray()" (click)="chooseOption(option)" class="typehead__result-list__item">
+      <ng-container *ngTemplateOutlet="option.template"></ng-container>
+    </div>
+  </div>
+</div>
