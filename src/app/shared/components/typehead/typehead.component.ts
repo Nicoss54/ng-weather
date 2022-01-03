@@ -13,9 +13,8 @@ import { TypeHeadOptionDirective } from './typehead-option.directive';
 
 export class TypeHeadComponent implements AfterViewInit, ControlValueAccessor, OnDestroy{
   @Output('onSearch') onSearch$ = new EventEmitter<string>();
-  @ContentChild('searchInput') searchInput: ElementRef<HTMLInputElement>; 
+  @ContentChild('searchInput', { static: true }) searchInput: ElementRef<HTMLInputElement>; 
   @ContentChildren(TypeHeadOptionDirective) options !: QueryList<TypeHeadOptionDirective>;
-  selectedValue: any;
   showListOptions: boolean = false;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
   listenerClickOutside: () => void;
@@ -58,7 +57,11 @@ export class TypeHeadComponent implements AfterViewInit, ControlValueAccessor, O
     this.listenerClickOutside();
   }
 
-  writeValue(value: any): void {}
+  writeValue(value: any): void {
+    if(!value) {
+      this.renderer.setProperty(this.searchInput.nativeElement, 'value', '');
+    }
+  }
   
   registerOnChange(fn: (x: any) => void ): void {
     this._onChanged = fn;

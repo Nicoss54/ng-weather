@@ -40,7 +40,6 @@ export class ZipcodeEntryComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.weatherService.addCurrentConditions(this.zipCodeForm.value.zipCode, this.zipCodeForm.value.country).pipe(tap(forecastData => {
       this.addNewLocation$.emit(forecastData);
       this.zipCodeForm.reset();
-      this.renderer.setProperty(this.searchInput.nativeElement, 'value', null);
     }));
   }
 }
