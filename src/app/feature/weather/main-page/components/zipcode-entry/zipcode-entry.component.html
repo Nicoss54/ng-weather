@@ -3,7 +3,7 @@
   <input type="text" placeholder="Zipcode" class="form-control" formControlName="zipCode" />
   <app-typehead formControlName="country">
     <input type="text" placeholder="Country" class="form-control" #searchInput />
-    <ng-container *ngFor="let country of filteredCountries">
+    <ng-container *ngFor="let country of countries$ | async">
       <ng-container *appTypeHeadOption="country; value: country.code; fieldDisplay: country.name">
         <span [innerHTML]="country.name | hightLight: searchInput.value"></span>
       </ng-container>

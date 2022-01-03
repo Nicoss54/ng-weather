@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { BUTTON_STATE } from 'app/shared/models/button-state.model';
-import { interval, Observable } from 'rxjs';
-import { first, switchMap, tap } from 'rxjs/operators';
+import { interval, Observable, throwError } from 'rxjs';
+import { catchError, first, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -27,7 +27,11 @@ export class ButtonThreeStateComponent implements OnInit {
     this.currentState = BUTTON_STATE.LOADING;
 
     this.clickAction$().pipe(
-      tap(() => this.currentState = BUTTON_STATE.DONE), 
+      tap(() => this.currentState = BUTTON_STATE.DONE),
+            catchError((error) => {
+              this.currentState = BUTTON_STATE.INITIAL
+              return throwError(error)
+            }),
       switchMap(() => interval(this.reInitiallyDelay).pipe(first()))).subscribe(() => {
         this.currentState = BUTTON_STATE.INITIAL;
         this.changeDetectorRef.markForCheck()

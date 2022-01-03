@@ -1,8 +1,9 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { CountriesService } from 'app/core/providers/countries.service';
 import { WeatherService } from 'app/core/providers/weather.service';
 import { ForecastData } from 'app/shared/models/forecat.model';
-import { fromEvent, Observable, Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
+import { fromEvent, iif, Observable, Subject } from 'rxjs';
+import { map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
 import { ZipCodeForm } from './zipcode.form';
 
 @Component({
@@ -12,23 +13,23 @@ import { ZipCodeForm } from './zipcode.form';
 export class ZipcodeEntryComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output('addNewLocation') addNewLocation$ = new EventEmitter<ForecastData>();
   @ViewChild('searchInput') searchInput: ElementRef<HTMLInputElement>;
+  countries$: Observable<Array<{ name: string, code: string }>>;
   zipCodeForm: ZipCodeForm;
-  countries: Array<{ name: string; code: string }>;
-  filteredCountries: Array<{ name: string; code: string }>;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
   
-  constructor(private readonly weatherService : WeatherService) { }
+  constructor(private readonly weatherService : WeatherService, private readonly countriesService: CountriesService) { }
 
   ngOnInit(): void {
-    this.countries = [{ name: 'USA', code: 'us'}, { name: 'France', code: 'fr' }, { name: 'Australia', code: 'au'}];
-    this.filteredCountries = [...this.countries];
     this.zipCodeForm = new ZipCodeForm();
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.searchInput.nativeElement, 'input').pipe(takeUntil(this.unsubscribe$)).subscribe(value => {
-      this.filteredCountries = this.countries.filter(country => country.name.toLowerCase().includes(this.searchInput.nativeElement.value.toLowerCase()));
-    })
+    const allCountries$ = this.countriesService.getCountries().pipe(shareReplay(1));
+    this.countries$ = fromEvent(this.searchInput.nativeElement, 'input').pipe(
+      startWith(this.searchInput.nativeElement.value),
+      switchMap(() => iif(() => ! !!this.searchInput.nativeElement.value, allCountries$, allCountries$.pipe(
+        map((countries) => countries.filter(country => country.name.toLowerCase().includes(this.searchInput.nativeElement.value.toLowerCase())))))),
+      )
   }
 
   ngOnDestroy(): void {
