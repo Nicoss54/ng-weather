@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WeatherService } from 'app/core/providers/weather.service';
 import { ForecastData } from 'app/shared/models/forecat.model';
 import { fromEvent, Observable, Subject } from 'rxjs';
@@ -17,7 +17,7 @@ export class ZipcodeEntryComponent implements OnInit, AfterViewInit, OnDestroy {
   filteredCountries: Array<{ name: string; code: string }>;
   unsubscribe$: Subject<boolean> = new Subject<boolean>();
   
-  constructor(private readonly weatherService : WeatherService, private readonly renderer: Renderer2) { }
+  constructor(private readonly weatherService : WeatherService) { }
 
   ngOnInit(): void {
     this.countries = [{ name: 'USA', code: 'us'}, { name: 'France', code: 'fr' }, { name: 'Australia', code: 'au'}];

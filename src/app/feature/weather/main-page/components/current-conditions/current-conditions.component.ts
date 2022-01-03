@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ForecastData } from 'app/shared/models/forecat.model';
 
 
@@ -13,11 +13,11 @@ export class CurrentConditionsComponent {
   @Input() weatherLocationConditions: Array<ForecastData>;
   @Output('removeLocation') removeLocation$: EventEmitter<string> = new EventEmitter();
 
-  constructor(private readonly router : Router) {
+  constructor(private readonly router : Router, private readonly route: ActivatedRoute) {
   }
 
   showForecast(zipCode : string, country: string){
-    this.router.navigate(['/forecast', zipCode, country])
+    this.router.navigate([zipCode, country], {relativeTo: this.route});
   }
 
   removeLocation(zipCode: string): void {

@@ -1,14 +1,16 @@
-import { ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ForecastsListComponent } from "./forecasts-list/forecasts-list.component";
-import { MainPageComponent } from "./main-page/main-page.component";
 
-const appRoutes: Routes = [
+
+const APP_ROUTES: Routes = [
+  {path: '', pathMatch: 'full', redirectTo: 'forecasts'},
   {
-    path: '', component: MainPageComponent
+    path: 'forecasts', loadChildren: async () => (await import ('./feature/weather/weather.module')).WeatherModule
   },
-  {
-    path: 'forecast/:zipcode/:country', component: ForecastsListComponent
-  }
 ];
-export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
+@NgModule({
+  imports: [RouterModule.forRoot(APP_ROUTES)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule { }
+
